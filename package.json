@@ -1,0 +1,32 @@
+{
+  "name": "inodeprototype",
+  "version": "1.0.0",
+  "description": "InterNode is an application for monitoring staking chains",
+  "main": "app.js",
+  "scripts": {
+    "test": "test",
+    "full_start": "tsc && nodemon dist/app.js",
+    "server_start": "nodemon dist/app.js",
+    "build": "tsc"
+  },
+  "keywords": [
+    "Blockchain",
+    "Node",
+    "Management",
+    "Proof"
+  ],
+  "author": "Tai Kersten",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.6",
+    "nodemon": "^2.0.3",
+    "tslint": "^6.1.2",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "caver-js": "^1.4.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  }
+}
