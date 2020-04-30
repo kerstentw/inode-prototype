@@ -1,6 +1,9 @@
 import { klaytnHandlers } from './handlers';
 import EPS from './constants/endpoints';
 
+// to-do: Create a RestAPI base class
+// to-do: Wrap senders and receivers and create custom errors
+
 class RestEndpoints {
 
   bindPing(_app, _start) {
@@ -61,6 +64,36 @@ class RestEndpoints {
     });
   }
 
+  bindGetBlockInfo(_app, _caver_js) {
+    _app.get(EPS.GET_BLOCK_INFO, async (req, res)=>{
+        let block_idx = req.query.block_idx;
+
+        if (!block_idx) {
+          res.send({err: "Need block_idx"})
+          return;
+        }
+
+        let info = await _caver_js.getFullBlockInfo(block_idx);
+
+        res.send({data: info});
+    })
+  }
+
+  bindGetTransactionInfo(_app, _caver_js) {
+    _app.get(EPS.GET_TRANSACTION_INFO, async (req, res) => {
+      let tx_hash: string = req.query.tx_hash;
+
+      if (!tx_hash) {
+        res.send({err: "Requires tx_hash"});
+        return;
+      }
+
+      let info = await _caver_js.getTransactionInfo(tx_hash);
+
+      res.send(data: info);
+
+    })
+  }
 
   // Proposer Endpoints
 
@@ -86,16 +119,24 @@ class RestEndpoints {
     })
   }
 
+
+
   constructor(_app, _server_start = 0) {
     let caver_js = new klaytnHandlers.caverHandlers.CaverHandler();
     let scope_api = new klaytnHandlers.scopeApiHandlers.ScopeApiHandler();
 
+    // Caver Bindings
     this.bindGetAccount(_app, caver_js)
     this.bindCreateAccount(_app, caver_js);
     this.bindPing(_app, _server_start);
     this.bindGetNodeInfo(_app, caver_js);
+    this.bindGetBlockInfo(_app, caver_js);
+    this.bindGetTransactionInfo(_app, caver_js);
+
+    // Scope Bindings
     this.bindGetProposerInfo(_app, scope_api);
-    this.bindGetCurrentPropSummaries(_app, scope_api)
+    this.bindGetCurrentPropSummaries(_app, scope_api);
+
   }
 }
 

@@ -1,0 +1,12 @@
+PORT=8888
+
+MAINNET_EN="https://api.cypress.klaytn.net:8651/"
+TESTNET_EN="https://api.baobab.klaytn.net:8651/"
+KLAYTN_EN="https://api.cypress.klaytn.net:8651/"
+KLAYTN_EN_BACKUP="http://localhost:8651/"
+EXTERNAL_API="https://scope-api.klaytn.com/api"
+
+MYSQL_USER=""
+MYSQL_PASSWORD=""
+MYSQL_HOST=""
+MYSQL_PORT=""
