@@ -2,7 +2,7 @@
 
 """
 Author: Tai Kersten
-Description: This pulls from Klaytn-scope 
+Description: This pulls from Klaytn-scope
              the address of validators
 """
 
@@ -15,14 +15,21 @@ REGISTERED_NETWORKS = {
   "baobab"  : "https://baobab-api.scope.klaytn.com"
 }
 
-PAGES_TO_SAMPLE = 10000
+PAGES_TO_SAMPLE = 1000
 
 NETWORK_TYPE = "cypress"
 
 request_frame = "/api/blocks?page={_page_num}"
 
-TARGET_FILE = "{net_type}_validators_{time}.json".format(net_type=NETWORK_TYPE, time=int(time.time()))
+CUR_TIME = int(time.time())
 
+TARGET_DIR = "./outputs"
+
+TARGET_FILE = "{tar_dir}/{net_type}_validators_{time}.json".format(
+  tar_dir=TARGET_DIR,
+  net_type=NETWORK_TYPE,
+  time=CUR_TIME
+)
 
 print("Will write to: %s" % TARGET_FILE)
 
@@ -32,8 +39,8 @@ for i in range(PAGES_TO_SAMPLE):
     try:
         query_frame = request_frame.format(_page_num = i + 1)
         query = REGISTERED_NETWORKS[NETWORK_TYPE] + query_frame
-        resp = requests.get(query) 
-        print(resp.json())  
+        resp = requests.get(query)
+        print(resp.json())
         proposers = list(set([prop.get("proposer") for prop in resp.json().get("result").get("blocks")]))
         prop_list.extend(proposers)
 
@@ -43,4 +50,4 @@ for i in range(PAGES_TO_SAMPLE):
 filtered_props = list(set(prop_list))
 
 with open(TARGET_FILE,"w") as my_fil:
-    my_fil.write(json.dumps({"proposers" : filtered_props, "number": len(filtered_props)}))
+    my_fil.write(json.dumps({"proposers" : filtered_props, "number": len(filtered_props), "acquired" : CUR_TIME}))

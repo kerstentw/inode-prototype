@@ -1,11 +1,10 @@
-import {
-  klaytnHandlers
-} from './handlers';
+import { klaytnHandlers } from './handlers';
+import EPS from './constants/endpoints';
 
 class RestEndpoints {
 
   bindPing(_app, _start) {
-    _app.get('/ping', (req, res) => {
+    _app.get(EPS.PING, (req, res) => {
       let recv_time = new Date().getTime();
       console.log(recv_time, _start)
       res.json({data: "ping", receive_time: recv_time, up_time: `${(recv_time - _start) /1000}s`});
@@ -18,7 +17,7 @@ class RestEndpoints {
       Create a Klay account with private keys.  Recommended only for testing.
     */
 
-    _app.get('/create_account', (req, res) => {
+    _app.get(EPS.CREATE_ACCOUNT, (req, res) => {
 
       let entropy : string = req.query.entropy || "";
       let recv_time = new Date().getTime();
@@ -35,7 +34,7 @@ class RestEndpoints {
      This endpoint grabs account info for a given account.
    */
 
-    _app.get('/get_account', async (req,res) => {
+    _app.get(EPS.GET_ACCOUNT, async (req,res) => {
       let account : string = req.query.acct;
       let block : string = req.query.defaultBlock || "latest";
 
@@ -56,14 +55,17 @@ class RestEndpoints {
       This endpoint gives an overview of network information.
     */
 
-    _app.get('/get_this_node_info', async (req,res) => {
+    _app.get(EPS.GET_NODE_INFO, async (req,res) => {
       const net_info = await _caver_js.getNetInfo();
       res.send({data: net_info});
     });
   }
 
-  bindGetProposerInfo(_app, scope_api) {
-    _app.get('/proposer_info', async (req, res) => {
+
+  // Proposer Endpoints
+
+  bindGetProposerInfo(_app, _scope_api) {
+    _app.get(EPS.PROPOSER_INFO, async (req, res) => {
       let account : string = req.query.acct;
 
       if (!account) {
@@ -71,9 +73,17 @@ class RestEndpoints {
         return;
       }
 
-      let info = await scope_api.getScopeAccount(account);
+      let info = await _scope_api.getScopeAccount(account);
       res.send({data: info});
     });
+  }
+
+  bindGetCurrentPropSummaries(_app, _scope_api) {
+    _app.get(EPS.PROPOSERS_SUMMARY, async (req, res)=>{
+      let info = await _scope_api.getCurrentProposersSummary();
+
+      res.send({data: info});
+    })
   }
 
   constructor(_app, _server_start = 0) {
@@ -85,6 +95,7 @@ class RestEndpoints {
     this.bindPing(_app, _server_start);
     this.bindGetNodeInfo(_app, caver_js);
     this.bindGetProposerInfo(_app, scope_api);
+    this.bindGetCurrentPropSummaries(_app, scope_api)
   }
 }
 
