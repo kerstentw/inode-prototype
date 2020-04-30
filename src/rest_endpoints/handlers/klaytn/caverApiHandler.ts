@@ -76,7 +76,7 @@ class CaverHandler {
 
 
   async getTransactionInfo(_transaction_hash) {
-    let info = await this.caver.klay.getTransaction(_blockNumOrHash);
+    let info = await this.caver.klay.getTransaction(_transaction_hash);
     return info;
   }
 }

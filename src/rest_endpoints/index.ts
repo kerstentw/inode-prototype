@@ -90,7 +90,7 @@ class RestEndpoints {
 
       let info = await _caver_js.getTransactionInfo(tx_hash);
 
-      res.send(data: info);
+      res.send({data: info});
 
     })
   }
