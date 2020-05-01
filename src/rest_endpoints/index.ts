@@ -6,6 +6,8 @@ import EPS from './constants/endpoints';
 
 class RestEndpoints {
 
+  // Misc. Endpoints
+
   bindPing(_app, _start) {
     _app.get(EPS.PING, (req, res) => {
       let recv_time = new Date().getTime();
@@ -119,11 +121,20 @@ class RestEndpoints {
     })
   }
 
+  bindGetCurrentNews(_app, _news_api) {
+    _app.get(EPS.GET_NETWORK_NEWS, async (req, res)=>{
+      let info = await _news_api.getAnnouncementsAndNews();
+
+      res.send({data: info});
+    })
+  }
+
 
 
   constructor(_app, _server_start = 0) {
     let caver_js = new klaytnHandlers.caverHandlers.CaverHandler();
     let scope_api = new klaytnHandlers.scopeApiHandlers.ScopeApiHandler();
+    let news_api = new klaytnHandlers.klaytnNewsHandlers.KlaytnNewsHandler();
 
     // Caver Bindings
     this.bindGetAccount(_app, caver_js)
@@ -132,6 +143,7 @@ class RestEndpoints {
     this.bindGetNodeInfo(_app, caver_js);
     this.bindGetBlockInfo(_app, caver_js);
     this.bindGetTransactionInfo(_app, caver_js);
+    this.bindGetCurrentNews(_app, news_api);
 
     // Scope Bindings
     this.bindGetProposerInfo(_app, scope_api);

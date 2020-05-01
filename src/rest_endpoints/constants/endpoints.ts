@@ -6,7 +6,8 @@ const EPS = {
   PROPOSER_INFO: "/proposer_info",
   PROPOSERS_SUMMARY: "/proposers_summary",
   GET_BLOCK_INFO: "/get_block_info",
-  GET_TRANSACTION_INFO: "/get_transaction_info"
+  GET_TRANSACTION_INFO: "/get_transaction_info",
+  GET_NETWORK_NEWS: "/get_network_news"
 }
 
 export default EPS;
