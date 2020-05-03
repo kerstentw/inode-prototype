@@ -8,7 +8,10 @@ class CaverHandler {
     this.caver = new Caver(process.env.KLAYTN_EN);
   }
 
-
+  async getBlockNumber() {
+    const block_num =  await this.caver.klay.getBlockNumber();
+    return block_num;
+  }
 
   async getAccount (_address, _defaultblock) {
     console.log(_address);
@@ -19,7 +22,6 @@ class CaverHandler {
     console.log("ADDR_INFO::: ", info);
     return info;
   }
-
 
 
   createAccount (_entropy="") {
@@ -73,7 +75,24 @@ class CaverHandler {
     return info;
   }
 
+  async getBlockRange(_start_block, _number_of_blocks) {
+    let blocks = new Array();
 
+
+    for (let i = 0; i < _number_of_blocks; i++) {
+      const block = await this.getFullBlockInfo(parseInt(_start_block) - i)
+      block["key"] = i;
+      blocks.push(block);
+    }
+
+    return blocks;
+
+  }
+
+  async getCurrentBlock() {
+    const block_num = await this.caver.klay.getBlockNumber();
+    return block_num;
+  }
 
   async getTransactionInfo(_transaction_hash) {
     let info = await this.caver.klay.getTransaction(_transaction_hash);

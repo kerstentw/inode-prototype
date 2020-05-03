@@ -81,6 +81,25 @@ class RestEndpoints {
     })
   }
 
+  bindGetBlockRange(_app, _caver_js) {
+    _app.get('/get_block_range', async (req, res) => {
+      let start = req.query.start;
+      let num_blocks = req.query.num_blocks;
+
+      if (start == "latest" && num_blocks) {
+        start = await _caver_js.getCurrentBlock();
+        num_blocks = num_blocks;
+      } else if (!start || ! num_blocks) {
+        res.send({err: "start and num_blocks needed"})
+        return;
+      }
+
+      const blocks = await _caver_js.getBlockRange(start, num_blocks);
+
+      res.send({data: blocks});
+    });
+  }
+
   bindGetTransactionInfo(_app, _caver_js) {
     _app.get(EPS.GET_TRANSACTION_INFO, async (req, res) => {
       let tx_hash: string = req.query.tx_hash;
@@ -143,6 +162,7 @@ class RestEndpoints {
     this.bindGetNodeInfo(_app, caver_js);
     this.bindGetBlockInfo(_app, caver_js);
     this.bindGetTransactionInfo(_app, caver_js);
+    this.bindGetBlockRange(_app, caver_js);
     this.bindGetCurrentNews(_app, news_api);
 
     // Scope Bindings
