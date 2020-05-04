@@ -148,6 +148,14 @@ class RestEndpoints {
     })
   }
 
+  bindGetCurrentTokenInfo(_app, _news_api) {
+    _app.get(EPS.GET_TOKEN_INFO, async (req,res)=>{
+      const abbr = req.query.abbr;
+      let info = await _news_api.getTokenLists(abbr)
+      res.send({data: info});
+    })
+  }
+
 
 
   constructor(_app, _server_start = 0) {
@@ -164,6 +172,7 @@ class RestEndpoints {
     this.bindGetTransactionInfo(_app, caver_js);
     this.bindGetBlockRange(_app, caver_js);
     this.bindGetCurrentNews(_app, news_api);
+    this.bindGetCurrentTokenInfo(_app, news_api);
 
     // Scope Bindings
     this.bindGetProposerInfo(_app, scope_api);

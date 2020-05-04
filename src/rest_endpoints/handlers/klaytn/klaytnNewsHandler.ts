@@ -14,8 +14,18 @@ class KlaytnNewsHandler {
     return info.data.data.children;
   }
 
-  constructor() {
 
+  async getTokenLists(_primary_token_sym){
+    let options: axiostypes.AxiosRequestConfig = {
+      method: 'get',
+      url: process.env.EXTERNAL_MARKETCAP_API
+    }
+
+    let info = await axios(options);
+
+    let primary = info.data.coins.filter(item=>{if(item.symbol == _primary_token_sym){return item}});
+
+    return {coin_list: info.data.coins, primary_token: primary};
   }
 
 }
