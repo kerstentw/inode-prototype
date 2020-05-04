@@ -25,7 +25,7 @@ class KlaytnNewsHandler {
 
     let primary = info.data.coins.filter(item=>{if(item.symbol == _primary_token_sym){return item}});
 
-    return {coin_list: info.data.coins, primary_token: primary};
+    return {coin_list: info.data.coins.slice(0,3500), primary_token: primary.length > 0? primary[0] : {}};
   }
 
 }
