@@ -8,11 +8,19 @@ class RestEndpoints {
 
   // Misc. Endpoints
 
-  bindPing(_app, _start) {
-    _app.get(EPS.PING, (req, res) => {
+  bindPing(_app, _start, _caver_js) {
+    _app.get(EPS.PING, async (req, res) => {
       let recv_time = new Date().getTime();
-      console.log(recv_time, _start)
-      res.json({data: "ping", receive_time: recv_time, up_time: `${(recv_time - _start) /1000}s`});
+      console.log(recv_time, _start);
+      let test = false;
+
+      try {
+        let num = await _caver_js.getCurrentBlock();
+        test = parseInt(num) > 0;
+      } catch {
+        test = false;
+      }
+      res.json({data: "ping", receive_time: recv_time,node_stat: test, up_time: `${(recv_time - _start) /1000}s`});
     })
   }
 
@@ -166,7 +174,7 @@ class RestEndpoints {
     // Caver Bindings
     this.bindGetAccount(_app, caver_js)
     this.bindCreateAccount(_app, caver_js);
-    this.bindPing(_app, _server_start);
+    this.bindPing(_app, _server_start, caver_js);
     this.bindGetNodeInfo(_app, caver_js);
     this.bindGetBlockInfo(_app, caver_js);
     this.bindGetTransactionInfo(_app, caver_js);

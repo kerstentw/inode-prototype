@@ -1,10 +1,21 @@
 PORT=8888
 
+NODE_TYPE="klaytn"
+
 MAINNET_EN="https://api.cypress.klaytn.net:8651/"
 TESTNET_EN="https://api.baobab.klaytn.net:8651/"
 KLAYTN_EN="https://api.cypress.klaytn.net:8651/"
 KLAYTN_EN_BACKUP="http://localhost:8651/"
+
+KLAYTN_JSON_RPC_URL="http://localhost:8545/"
+
 EXTERNAL_API="https://scope-api.klaytn.com/api"
+EXTERNAL_NEWS_API="https://www.reddit.com/r/klaytn.json"
+
+EXTERNAL_MARKETCAP_API = "https://api.coingecko.com/api/v3/search?locale=en&img_path_only=1"
+EXTERNAL_PRICE_API = ""
+
+
 
 MYSQL_USER=""
 MYSQL_PASSWORD=""
