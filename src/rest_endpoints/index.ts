@@ -11,8 +11,9 @@ class RestEndpoints {
   bindPing(_app, _start, _caver_js) {
     _app.get(EPS.PING, async (req, res) => {
       let recv_time = new Date().getTime();
-      console.log(recv_time, _start);
+      console.log("Caver_Stat::: ", _caver_js);
       let test = false;
+
 
       try {
         let num = await _caver_js.getCurrentBlock();
